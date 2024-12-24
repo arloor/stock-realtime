@@ -7,6 +7,12 @@
 ## 运行
 
 ```bash
+podman run -it --name stock-realtime --rm --replace --network host docker.io/arloor/stock-realtime
+```
+
+## 调试
+
+```bash
 npm install -g pnpm
 pnpm i
 pnpm dev
