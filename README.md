@@ -1,18 +1,18 @@
-## A股实时行情
+## A 股实时行情
 
-每3秒定时刷新A股行情，支持多个股票代码，支持设置持仓以计算当日盈亏。
+每 3 秒定时刷新 A 股行情，支持多个股票代码，支持设置持仓以计算当日盈亏。
 
-不存储任何数据，使用公开行情数据api（新浪财经）。
+不存储任何数据，使用公开行情数据 api（新浪财经）。
 
-基于Next.js开发，服务端渲染技术。
+基于 Next.js 开发，服务端渲染技术。
 
 ## 表格视图
 
-![alt text](image.png)
+![alt text](image-1.png)
 
 ## 卡片视图
 
-![alt text](image-1.png)
+![alt text](image.png)
 
 ## 移动端
 
@@ -34,7 +34,7 @@ pnpm i
 pnpm dev
 ```
 
-## docker镜像编译
+## docker 镜像编译
 
 ```bash
 podman login docker.io -u arloor -p ${your_docker_hub_token}

@@ -115,8 +115,8 @@ export default async function Page(props: {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row justify-end items-center mt-4 mb-4 gap-4 sm:gap-2">
-        <div className="flex flex-row justify-end items-center gap-2 sm:mr-auto">
+      <div className="flex flex-col sm:flex-row justify-start items-center mt-4 mb-4 gap-4 sm:gap-2">
+        <div className="flex flex-row justify-end items-center gap-2">
           <div
             className={`font-bold ${colored ? (parseFloat(totalProfit) >= 0 ? "text-red-500" : "text-green-500") : ""}`}
           >
