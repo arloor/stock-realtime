@@ -1,8 +1,16 @@
 ## A股实时行情
 
-数据来源新浪财经
+## 表格视图
 
 ![alt text](image.png)
+
+## 卡片视图
+
+![alt text](image-1.png)
+
+## 移动端
+
+![alt text](image-2.png)
 
 ## 运行
 
