@@ -120,21 +120,21 @@ export default async function Page(props: {
                 </div>
                 <div
                   className={`${
-                    parseFloat(stock.changePercent) >= 0
-                      ? "text-red-500"
-                      : "text-green-500"
+                  parseFloat(stock.changePercent) >= 0
+                    ? "text-red-500"
+                    : "text-green-500"
                   }`}
                 >
-                   <strong>当前价: {stock.price}</strong>
+                   <strong>当前价: {stock.price === 0 ? "-" : stock.price}</strong>
                 </div>
                 <div
                   className={`${
-                    parseFloat(stock.changePercent) >= 0
-                      ? "text-red-500"
-                      : "text-green-500"
+                  parseFloat(stock.changePercent) >= 0
+                    ? "text-red-500"
+                    : "text-green-500"
                   }`}
                 >
-                  <strong>涨跌幅: {stock.changePercent}%</strong>
+                  <strong>涨跌幅: {stock.price === 0 ? "-" : stock.changePercent}%</strong>
                 </div>
                 <div>
                   <strong>成交量: {formatVolume(stock.volume)}</strong>
