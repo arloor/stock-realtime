@@ -118,25 +118,44 @@ export default async function Page(props: {
     )
     .toFixed(1);
 
-  const totalPositionValue = stocksData.reduce(
-    (sum, stock) => sum + (stock?.positionValue ? parseFloat(stock.positionValue) : 0),
-    0
-  ).toFixed(0);
+  const totalPositionValue = stocksData
+    .reduce(
+      (sum, stock) =>
+        sum + (stock?.positionValue ? parseFloat(stock.positionValue) : 0),
+      0
+    )
+    .toFixed(0);
 
   return (
     <>
       <div className="flex flex-col sm:flex-row justify-start items-center mt-4 mb-4 gap-4 sm:gap-2">
         <div className="flex flex-row justify-end items-center gap-2">
-            <div className="font-bold">
+          <div className="font-bold">
             <span>今日盈亏：</span>
-            <span className={colored ? (parseFloat(totalProfit) >= 0 ? "text-red-500" : "text-green-500") : ""}>
+            <span
+              className={
+                colored
+                  ? parseFloat(totalProfit) >= 0
+                    ? "text-red-500"
+                    : "text-green-500"
+                  : ""
+              }
+            >
               {totalProfit}
             </span>
             <span> 总持仓：</span>
-            <span className={colored ? (parseFloat(totalPositionValue) >= 0 ? "text-red-500" : "text-green-500") : ""}>
+            <span
+              className={
+                colored
+                  ? parseFloat(totalPositionValue) >= 0
+                    ? "text-red-500"
+                    : "text-green-500"
+                  : ""
+              }
+            >
               {totalPositionValue}
             </span>
-            </div>
+          </div>
         </div>
         <div className="flex flex-row justify-end items-center gap-2">
           <TableViewControl />
@@ -188,7 +207,9 @@ export default async function Page(props: {
                       </Link>
                       <Link
                         className="block sm:hidden"
-                        href={`https://wap.eastmoney.com/quote/stock/${stock.market === "sz" ? "0" : "1"}.${stock.code}.html`}
+                        href={`https://wap.eastmoney.com/quote/stock/${
+                          stock.market === "sz" ? "0" : "1"
+                        }.${stock.code}.html`}
                       >
                         <strong>{stock.name}</strong>
                       </Link>
@@ -242,9 +263,7 @@ export default async function Page(props: {
                       <strong>{stock.profit || "-"}</strong>
                     </td>
                     <td className="px-4 py-2">{formatVolume(stock.volume)}</td>
-                    <td className="px-4 py-2">
-                      {stock.positionValue || "-"}
-                    </td>
+                    <td className="px-4 py-2">{stock.positionValue || "-"}</td>
                     <td className="px-4 py-2">{stock.count || "-"}</td>
                     <td className="px-4 py-2">{stock.high}</td>
                     <td className="px-4 py-2">{stock.low}</td>
@@ -281,7 +300,9 @@ export default async function Page(props: {
                     </Link>
                     <Link
                       className="block sm:hidden"
-                      href={`https://wap.eastmoney.com/quote/stock/${stock.market === "sz" ? "0" : "1"}.${stock.code}.html`}
+                      href={`https://wap.eastmoney.com/quote/stock/${
+                        stock.market === "sz" ? "0" : "1"
+                      }.${stock.code}.html`}
                     >
                       {stock.name} ({stock.market}
                       {stock.code})
@@ -292,10 +313,10 @@ export default async function Page(props: {
                       !colored && parseFloat(stock.priceChange) < 0
                         ? "text-gray-500"
                         : colored
-                        ? parseFloat(stock.priceChange) >= 0
-                          ? "text-red-500"
-                          : "text-green-500"
-                        : ""
+                          ? parseFloat(stock.priceChange) >= 0
+                            ? "text-red-500"
+                            : "text-green-500"
+                          : ""
                     }
                   >
                     <strong>
@@ -307,10 +328,10 @@ export default async function Page(props: {
                       !colored && parseFloat(stock.priceChange) < 0
                         ? "text-gray-500"
                         : colored
-                        ? parseFloat(stock.priceChange) >= 0
-                          ? "text-red-500"
-                          : "text-green-500"
-                        : ""
+                          ? parseFloat(stock.priceChange) >= 0
+                            ? "text-red-500"
+                            : "text-green-500"
+                          : ""
                     }
                   >
                     <strong>
@@ -322,10 +343,10 @@ export default async function Page(props: {
                       !colored && parseFloat(stock.priceChange) < 0
                         ? "text-gray-500"
                         : colored
-                        ? parseFloat(stock.changePercent) >= 0
-                          ? "text-red-500"
-                          : "text-green-500"
-                        : ""
+                          ? parseFloat(stock.changePercent) >= 0
+                            ? "text-red-500"
+                            : "text-green-500"
+                          : ""
                     }
                   >
                     <strong>
@@ -351,10 +372,10 @@ export default async function Page(props: {
                           !colored && parseFloat(stock.priceChange || "0") < 0
                             ? "text-gray-500"
                             : colored
-                            ? parseFloat(stock.priceChange || "0") >= 0
-                              ? "text-red-500"
-                              : "text-green-500"
-                            : ""
+                              ? parseFloat(stock.priceChange || "0") >= 0
+                                ? "text-red-500"
+                                : "text-green-500"
+                              : ""
                         }
                       >
                         <strong>持仓盈亏: {stock.profit}</strong>
