@@ -22,6 +22,10 @@
 
 ```bash
 podman run -it --name stock-realtime --rm --replace --pull=newer --network host docker.io/arloor/stock-realtime
+## 指定端口
+podman run -it --name stock-realtime --rm  --network host -e PORT=3000 docker.io/arloor/stock-realtime
+## 后台运行
+podman run -d --name stock-realtime --rm --replace --pull=newer --network host docker.io/arloor/stock-realtime
 ```
 
 访问 http://your_ip:9999/?code=sz399001&code=sh000001&autoRefresh=true
