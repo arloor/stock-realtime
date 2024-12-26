@@ -37,6 +37,8 @@ export default async function Page(props: {
   const buffer = await response.arrayBuffer();
   // 将 GBK 编码的 buffer 转换为 UTF-8 字符串
   const res = iconv.decode(Buffer.from(buffer), "gbk");
+  // 记录
+  console.log(res);
 
   // 解析股票数据的函数
   const parseStockData = (str: string, count?: number) => {
