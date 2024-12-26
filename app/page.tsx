@@ -72,7 +72,7 @@ export default async function Page(props: {
         priceChange, // 涨跌额
         changePercent, // 涨跌幅
         count, // 新增持仓数量
-        profit: count
+        profit: count&&currentPrice !== 0
           ? code.startsWith("5") || code.startsWith("15") //指数ETF，保留1位
             ? (parseFloat(priceChange) * count * 100).toFixed(1)
             : (parseFloat(priceChange) * count * 100).toFixed(0)
