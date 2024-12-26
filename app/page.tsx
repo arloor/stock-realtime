@@ -72,11 +72,16 @@ export default async function Page(props: {
         priceChange, // 涨跌额
         changePercent, // 涨跌幅
         count, // 新增持仓数量
-        profit: count&&currentPrice !== 0
-          ? code.startsWith("5") || code.startsWith("15") //指数ETF，保留1位
-            ? (parseFloat(priceChange) * count * 100).toFixed(1)
-            : (parseFloat(priceChange) * count * 100).toFixed(0)
-          : undefined, // 新增持仓盈亏
+        profit:
+          count && currentPrice !== 0
+            ? code.startsWith("5") || code.startsWith("15") //指数ETF，保留1位
+              ? (parseFloat(priceChange) * count * 100).toFixed(1)
+              : (parseFloat(priceChange) * count * 100).toFixed(0)
+            : undefined, // 新增持仓盈亏
+        positionValue:
+          count && currentPrice
+            ? (currentPrice * count * 100).toFixed(2)
+            : undefined,
       };
     }
     return null;
@@ -113,15 +118,25 @@ export default async function Page(props: {
     )
     .toFixed(1);
 
+  const totalPositionValue = stocksData.reduce(
+    (sum, stock) => sum + (stock?.positionValue ? parseFloat(stock.positionValue) : 0),
+    0
+  ).toFixed(0);
+
   return (
     <>
       <div className="flex flex-col sm:flex-row justify-start items-center mt-4 mb-4 gap-4 sm:gap-2">
         <div className="flex flex-row justify-end items-center gap-2">
-          <div
-            className={`font-bold ${colored ? (parseFloat(totalProfit) >= 0 ? "text-red-500" : "text-green-500") : ""}`}
-          >
-            今日盈亏总计：{totalProfit}
-          </div>
+            <div className="font-bold">
+            <span>今日盈亏：</span>
+            <span className={colored ? (parseFloat(totalProfit) >= 0 ? "text-red-500" : "text-green-500") : ""}>
+              {totalProfit}
+            </span>
+            <span> 总持仓：</span>
+            <span className={colored ? (parseFloat(totalPositionValue) >= 0 ? "text-red-500" : "text-green-500") : ""}>
+              {totalPositionValue}
+            </span>
+            </div>
         </div>
         <div className="flex flex-row justify-end items-center gap-2">
           <TableViewControl />
@@ -141,6 +156,7 @@ export default async function Page(props: {
                 <th className="px-4 py-2">涨跌额</th>
                 <th className="px-4 py-2">今日盈亏</th>
                 <th className="px-4 py-2">成交量</th>
+                <th className="px-4 py-2">持仓金额</th>
                 <th className="px-4 py-2">持仓(手)</th>
                 <th className="px-4 py-2">最高</th>
                 <th className="px-4 py-2">最低</th>
@@ -150,7 +166,14 @@ export default async function Page(props: {
             <tbody>
               {stocksData.map((stock, index) =>
                 stock ? (
-                  <tr key={codes[index].code} className="border-b">
+                  <tr
+                    key={codes[index].code}
+                    className={`border-b ${
+                      !colored && parseFloat(stock.priceChange) < 0
+                        ? "bg-gray-100"
+                        : ""
+                    }`}
+                  >
                     <td className="px-4 py-2">
                       <Link
                         // className="text-link"
@@ -171,30 +194,57 @@ export default async function Page(props: {
                       </Link>
                     </td>
                     <td
-                      className={`px-4 py-2 ${colored ? (parseFloat(stock.priceChange) >= 0 ? "text-red-500" : "text-green-500") : ""}`}
+                      className={`px-4 py-2 ${
+                        colored
+                          ? parseFloat(stock.priceChange) >= 0
+                            ? "text-red-500"
+                            : "text-green-500"
+                          : ""
+                      }`}
                     >
                       <strong>{stock.price === 0 ? "-" : stock.price}</strong>
                     </td>
                     <td
-                      className={`px-4 py-2 ${colored ? (parseFloat(stock.priceChange) >= 0 ? "text-red-500" : "text-green-500") : ""}`}
+                      className={`px-4 py-2 ${
+                        colored
+                          ? parseFloat(stock.priceChange) >= 0
+                            ? "text-red-500"
+                            : "text-green-500"
+                          : ""
+                      }`}
                     >
                       <strong>
                         {stock.price === 0 ? "-" : stock.changePercent}%
                       </strong>
                     </td>
                     <td
-                      className={`px-4 py-2 ${colored ? (parseFloat(stock.priceChange) >= 0 ? "text-red-500" : "text-green-500") : ""}`}
+                      className={`px-4 py-2 ${
+                        colored
+                          ? parseFloat(stock.priceChange) >= 0
+                            ? "text-red-500"
+                            : "text-green-500"
+                          : ""
+                      }`}
                     >
                       <strong>
                         {stock.price === 0 ? "-" : stock.priceChange}
                       </strong>
                     </td>
                     <td
-                      className={`px-4 py-2 ${colored ? (stock.profit && parseFloat(stock.priceChange) >= 0 ? "text-red-500" : "text-green-500") : ""}`}
+                      className={`px-4 py-2 ${
+                        colored
+                          ? stock.profit && parseFloat(stock.priceChange) >= 0
+                            ? "text-red-500"
+                            : "text-green-500"
+                          : ""
+                      }`}
                     >
                       <strong>{stock.profit || "-"}</strong>
                     </td>
                     <td className="px-4 py-2">{formatVolume(stock.volume)}</td>
+                    <td className="px-4 py-2">
+                      {stock.positionValue || "-"}
+                    </td>
                     <td className="px-4 py-2">{stock.count || "-"}</td>
                     <td className="px-4 py-2">{stock.high}</td>
                     <td className="px-4 py-2">{stock.low}</td>
@@ -239,7 +289,9 @@ export default async function Page(props: {
                   </div>
                   <div
                     className={
-                      colored
+                      !colored && parseFloat(stock.priceChange) < 0
+                        ? "text-gray-500"
+                        : colored
                         ? parseFloat(stock.priceChange) >= 0
                           ? "text-red-500"
                           : "text-green-500"
@@ -252,7 +304,9 @@ export default async function Page(props: {
                   </div>
                   <div
                     className={
-                      colored
+                      !colored && parseFloat(stock.priceChange) < 0
+                        ? "text-gray-500"
+                        : colored
                         ? parseFloat(stock.priceChange) >= 0
                           ? "text-red-500"
                           : "text-green-500"
@@ -265,7 +319,9 @@ export default async function Page(props: {
                   </div>
                   <div
                     className={
-                      colored
+                      !colored && parseFloat(stock.priceChange) < 0
+                        ? "text-gray-500"
+                        : colored
                         ? parseFloat(stock.changePercent) >= 0
                           ? "text-red-500"
                           : "text-green-500"
@@ -285,11 +341,16 @@ export default async function Page(props: {
                   {stock.count && (
                     <>
                       <div>
+                        <strong>持仓金额: {stock.positionValue || "-"}</strong>
+                      </div>
+                      <div>
                         <strong>持仓: {stock.count}手</strong>
                       </div>
                       <div
                         className={
-                          colored
+                          !colored && parseFloat(stock.priceChange || "0") < 0
+                            ? "text-gray-500"
+                            : colored
                             ? parseFloat(stock.priceChange || "0") >= 0
                               ? "text-red-500"
                               : "text-green-500"
