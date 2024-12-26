@@ -23,9 +23,13 @@
 ```bash
 podman run -it --name stock-realtime --rm --replace --pull=newer --network host docker.io/arloor/stock-realtime
 ## 指定端口
-podman run -it --name stock-realtime --rm  --network host -e PORT=3000 docker.io/arloor/stock-realtime
+podman run -it --name stock-realtime --rm --replace --pull=newer --network host -e PORT=3000 docker.io/arloor/stock-realtime
 ## 后台运行
 podman run -d --name stock-realtime --rm --replace --pull=newer --network host docker.io/arloor/stock-realtime
+## 用systemd管理podman容器
+podman generate systemd --new --name stock-realtime| tee /lib/systemd/system/stock.service
+systemctl daemon-reload
+systemctl enable stock --now
 ```
 
 访问 http://your_ip:9999/?code=sz399001&code=sh000001&autoRefresh=true
@@ -46,7 +50,7 @@ podman build -f Dockerfile . -t docker.io/arloor/stock-realtime --build-arg=PORT
 podman push docker.io/arloor/stock-realtime:latest
 ```
 
-docker build需要手动增加 `--build-arg http_proxy --build-arg https_proxy`参数来使用代理
+docker build 需要手动增加 `--build-arg http_proxy --build-arg https_proxy`参数来使用代理
 
 ```bash
 docker build -f Dockerfile . -t docker.io/arloor/stock-realtime --build-arg PORT=9999 --build-arg http_proxy --build-arg https_proxy --network host
