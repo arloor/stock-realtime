@@ -21,7 +21,7 @@
 ## 运行
 
 ```bash
-podman run -it --name stock-realtime --rm --replace --network host docker.io/arloor/stock-realtime
+podman run -it --name stock-realtime --rm --replace --pull=newer --network host docker.io/arloor/stock-realtime
 ```
 
 访问 http://your_ip:9999/?code=sz399001&code=sh000001&autoRefresh=true
