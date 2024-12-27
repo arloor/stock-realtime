@@ -1,7 +1,7 @@
 name: docker_build_and_push
 on:
   push:
-    branches: [ "release","release/**"]
+    branches: ["release", "release/**"]
 permissions:
   contents: write
 env:
